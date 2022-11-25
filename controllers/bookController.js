@@ -47,30 +47,35 @@ const book_details = async (req, res) => {
 };
 
 const book_info = async (req, res) => {
-  const id = req.params.id;
-  let url;
-  const isbn = await Book.findById(id).then((result) => result.isbn);
+  try {
+    const id = req.params.id;
+    let url;
+    const isbn = await Book.findById(id).then((result) => result.isbn);
 
-  const info = await fetch(
-    `http://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
-    {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((res) => (url = res.url))
-    .then((result) =>
-      res.status(200).json({
-        status: "success",
-        data: {
-          result,
+    const info = await fetch(
+      `http://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-      })
-    );
-  console.log(url);
-  console.log(isbn);
+      }
+    )
+      .then((res) => (url = res.url))
+      .then((result) =>
+        res.status(200).json({
+          status: "success",
+          data: {
+            result,
+          },
+        })
+      );
+
+    console.log(url);
+    console.log(isbn);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const book_create_get = (req, res) => {
