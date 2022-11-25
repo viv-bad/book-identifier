@@ -1,0 +1,11 @@
+///////BOOKSTORE APP///////
+
+/////To Fix:
+
+- Redirection to home page after deleting a book
+- CSS styling
+- Connect to book API to fetch extra book data (Publisher, Pagecount, coverimage) upon inputting book details (ISBN)
+- Or just make this project a book directory for all books
+- Random book generator
+- Random book generator by genre
+- Add patch request to details part of book to add/edit information, and to add your review/blurb on book.

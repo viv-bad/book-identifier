@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head.ejs') %>
+
+  <body>
+    <%- include('../partials/nav.ejs') %>
+
+    <div class="details content">
+      <h2><%= book.title %></h2>
+      <div class="content">
+        <p><%=book.author%></p>
+        <p><%= book.year %></p>
+        <p>ISBN: <%= book.isbn %></p>
+        <!-- prettier-ignore -->
+        <img src=<%= book.imageCover %> alt="image">
+      </div>
+
+      <a class="delete" href="/" data-doc="<%= book.id %> "><img src="/public/img/trash-can-2.png" alt="Delete"></a>
+      <!-- prettier ignore -->
+      <!-- <a class="edit" href="/books/update/<%= book.id %>">Edit</a> -->
+      <a class="edit" href="/books/edit/<%= book.id %> ">Edit</a>
+
+
+    <%- include('../partials/footer.ejs') %>
+
+    <script>
+      const trashcan = document.querySelector("a.delete");
+
+      trashcan.addEventListener("click", (e) => {
+        // console.log("click");
+        const endpoint = `/books/${trashcan.dataset.doc}`;
+
+        fetch(endpoint, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            // console.log(response.json());
+            response.json();
+          })
+          .then((data) => {
+            // console.log(data);
+            window.location.href = data.redirect;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    </script>
+  </body>
+</html>
+
+<!-- <script>
+      const edit = document.querySelector("a.edit");
+
+      edit.addEventListener("click", (e) => {
+        const endpoint = `/books/${edit.dataset.doc}`;
+        fetch(endpoint, {
+          method: "PATCH"
+        }).then((response) => {
+          console.log(response.json())
+        })
+      }
+    </script> -->

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head.ejs') %>
+
+  <body>
+    <%- include('../partials/nav.ejs') %>
+
+    <div class="books content">
+      <h2>All Books</h2>
+
+      <% if (books.length > 0) { %> <% books.forEach(book => { %>
+      <a class="single" href="/books/<%= book._id %> ">
+        <h3 class="title"><%= book.title %></h3>
+        <p class="author"><%= book.author %></p>
+        <p class="year"><%= book.year %></p>
+        <!-- prettier-ignore -->
+        <img class="image" src=<%= book.imageCover %> alt="image">
+      </a>
+      <% }) %> <% } else { %>
+      <p>There are no books to display...</p>
+
+      <% } %>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+  </body>
+</html>
