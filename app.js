@@ -8,6 +8,7 @@ const app = express();
 
 //register view engine
 app.set("view engine", "ejs");
+// app.set("views", "books");
 dotenv.config({ path: "./config.env" });
 
 const { response } = require("express");

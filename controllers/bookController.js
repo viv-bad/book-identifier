@@ -31,15 +31,11 @@ const book_details = async (req, res) => {
     .then((result) => {
       res.render("books/details", { book: result, title: "Book Details" });
     })
-    // .then(
-    //   (result) => console.log(result)
-    //   // res.status(200).json({
-    //   //   status: "success",
-    //   //   data: {
-    //   //     result,
-    //   //   },
-    //   // })
-    // )
+
+    // Book.findById(id)
+    //   .then((result) => {
+    //     res.status(200).json({ status: "success", data: { result } });
+    //   })
     .catch((err) => {
       //   res.render("404", { title: "Book not found" });
       console.log(err);
@@ -50,18 +46,34 @@ const book_info = async (req, res) => {
   try {
     const id = req.params.id;
     let url;
+    let data;
     const isbn = await Book.findById(id).then((result) => result.isbn);
 
     const info = await fetch(
-      `http://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
+      `https://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
       {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
       }
-    )
-      .then((res) => (url = res.url))
+    ).then((res) => (url = res.url));
+    // .then((result) =>
+    //   res.status(200).json({
+    //     status: "success",
+    //     data: {
+    //       result,
+    //     },
+    //   })
+    // );
+
+    const json = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
       .then((result) =>
         res.status(200).json({
           status: "success",
@@ -71,6 +83,8 @@ const book_info = async (req, res) => {
         })
       );
 
+    console.log(data);
+    // console.log(info);
     console.log(url);
     console.log(isbn);
   } catch (err) {
