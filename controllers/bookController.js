@@ -46,7 +46,8 @@ const book_info = async (req, res) => {
   try {
     const id = req.params.id;
     let url;
-    let data;
+    // let bookData; isbn json data
+    let bookOlidData;
     const isbn = await Book.findById(id).then((result) => result.isbn);
 
     const info = await fetch(
@@ -58,6 +59,7 @@ const book_info = async (req, res) => {
         },
       }
     ).then((res) => (url = res.url));
+    // .then((res) => console.log(res));
     // .then((result) =>
     //   res.status(200).json({
     //     status: "success",
@@ -74,6 +76,7 @@ const book_info = async (req, res) => {
       },
     })
       .then((res) => res.json())
+      .then((result) => (bookData = result))
       .then((result) =>
         res.status(200).json({
           status: "success",
@@ -83,10 +86,64 @@ const book_info = async (req, res) => {
         })
       );
 
-    console.log(data);
-    // console.log(info);
-    console.log(url);
-    console.log(isbn);
+    const items = bookData.items;
+    const [{ fromRecord }] = items;
+    console.log(fromRecord);
+
+    const bookOlid = fromRecord;
+
+    const olidFetch = await fetch(`https://openlibrary.org${bookOlid}.json`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => (bookOlidData = result));
+
+    console.log(bookOlidData);
+    const [publishers] = bookOlidData.publishers;
+    console.log(publishers);
+    const datePublished = bookOlidData.publish_date;
+    console.log(datePublished);
+    const [authorsLink] = bookOlidData.authors;
+    console.log(authorsLink);
+    const title = bookOlidData.title;
+    console.log(title);
+
+    // console.log(bookData.records);
+    // const { "/books/OL7353617M": data } = bookData.records;
+    // console.log(data);
+    //Here we assign the bookLink to the bookId and enter the object data through there, but we need to change the hard coded link to a dynamic changing link that changes with the book mongoDB ID
+    // console.log(bookOlid);
+    // const olid = bookOlid.split("/")[2];
+    // console.log(olid);
+    // const { fromRecord } = bookData.records;
+    // console.log(fromRecord);
+    // console.log(bookData.records);
+    // const { bookOlid: data } = bookData.records;
+    // console.log(data);
+    // const { bookLink: dataAll } = bookData.records;
+    // const { bookLink: bookId } = bookData.records;
+    // console.log(bookId);
+    // const [olid] = bookId.olids;
+    // console.log(olid);
+    // const bookLink = bookData.records;
+    // console.log(bookLink);
+    // const { items } = bookLink;
+    // console.log(items);
+    // const { "/books/OL7353617M": bookId } = bookLink; //Here we assign the bookLink to the bookId and enter the object data through there, but we need to change the hard coded link to a dynamic changing link that changes with the book mongoDB ID
+    // console.log(bookId);
+    // const title = bookId.data.title;
+    // const [{ name: authors }] = bookId.data.authors; //Here we destructure an array of objects
+    // const [{ name }] = bookId.data.publishers; //Here we destructure an array of objects
+    // const datePublished = bookId.data.publish_date;
+    // const bookUrl = bookId.data.url;
+
+    // console.log("Title:", title);
+    // console.log("Authors:", authors);
+    // console.log("Publishers:", name);
+    // console.log("Publish date:", datePublished);
   } catch (err) {
     console.log(err);
   }
