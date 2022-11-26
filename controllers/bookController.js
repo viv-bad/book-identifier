@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const Book = require("./../bookModel");
+const Book = require("../models/bookModel");
 // book_index (all books), book_details (single book), book_create_get , book_create_post, book_delete
 
 const book_index = (req, res) => {
@@ -86,30 +86,50 @@ const book_info = async (req, res) => {
         })
       );
 
-    const items = bookData.items;
-    const [{ fromRecord }] = items;
-    console.log(fromRecord);
+    const bookInfo = bookData.records[Object.keys(bookData.records)[0]]; //index the object to get book data below the OLID link
+    // console.log(bookInfo.data);
 
-    const bookOlid = fromRecord;
+    const title = bookInfo.data.title;
+    const [{ name: authorName }] = bookInfo.data.authors;
+    const [{ url: authorUrl }] = bookInfo.data.authors;
+    const publishedDate = bookInfo.data.publish_date;
+    const pages = bookInfo.data.number_of_pages;
+    const [{ name: publishers }] = bookInfo.data.publishers;
+    const bookUrl = bookInfo.data.url;
 
-    const olidFetch = await fetch(`https://openlibrary.org${bookOlid}.json`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => (bookOlidData = result));
-
-    console.log(bookOlidData);
-    const [publishers] = bookOlidData.publishers;
-    console.log(publishers);
-    const datePublished = bookOlidData.publish_date;
-    console.log(datePublished);
-    const [authorsLink] = bookOlidData.authors;
-    console.log(authorsLink);
-    const title = bookOlidData.title;
     console.log(title);
+    console.log(authorName);
+    console.log(publishedDate);
+    console.log(authorUrl);
+    console.log(pages);
+    console.log(publishers);
+    console.log(bookUrl);
+    // const items = bookData.items;
+    // const [{ fromRecord }] = items;
+    // console.log(fromRecord);
+
+    // const bookOlid = fromRecord;
+
+    // console.log(bookOlid);
+
+    // const olidFetch = await fetch(`https://openlibrary.org${bookOlid}.json`, {
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then((result) => (bookOlidData = result));
+
+    // console.log(bookOlidData);
+    // const [publishers] = bookOlidData.publishers;
+    // console.log(publishers);
+    // const datePublished = bookOlidData.publish_date;
+    // console.log(datePublished);
+    // // const [authorsLink] = bookOlidData.authors;
+    // // console.log(authorsLink);
+    // const title = bookOlidData.title;
+    // console.log(title);
 
     // console.log(bookData.records);
     // const { "/books/OL7353617M": data } = bookData.records;

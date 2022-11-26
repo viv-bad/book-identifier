@@ -1,19 +1,18 @@
 const mongoose = require("mongoose");
+const bookController = require("./../controllers/bookController");
 // const slugify = require("slugify");
 // const validator = require("validator");
 
 const bookSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    // default: bookController.book_info.title,
   },
   author: {
     type: String,
-    required: true,
   },
   year: {
     type: Number,
-    required: true,
   },
   isbn: {
     type: Number,
