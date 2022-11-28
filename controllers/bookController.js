@@ -24,10 +24,9 @@ const book_index = (req, res) => {
 
 const book_details = async (req, res) => {
   const id = req.params.id;
-
   if (!id) return;
 
-  Book.findById(id)
+  await Book.findById(id)
     .then((result) => {
       res.render("books/details", { book: result, title: "Book Details" });
     })
@@ -36,6 +35,7 @@ const book_details = async (req, res) => {
     //   .then((result) => {
     //     res.status(200).json({ status: "success", data: { result } });
     //   })
+
     .catch((err) => {
       //   res.render("404", { title: "Book not found" });
       console.log(err);
@@ -77,33 +77,89 @@ const book_info = async (req, res) => {
     })
       .then((res) => res.json())
       .then((result) => (bookData = result))
-      .then((result) =>
-        res.status(200).json({
-          status: "success",
-          data: {
-            result,
-          },
-        })
-      );
+      .then(res.redirect(`/books/${id}`));
+
+    // .then((result) =>
+    //   res.status(200).json({
+    //     status: "success",
+    //     data: {
+    //       result,
+    //     },
+    //   })
+    // );
+
+    // const capitalize = function (string) {
+    //   string
+    //     .toLowerCase()
+    //     .split(" ")
+    //     .map((word) =>
+    //       console
+    //         .log(word.charAt(0).toUpperCase() + word.substring(1))
+    //         .join(" ")
+    //     );
+    // };
+
+    const capitalize = (string) => {
+      return string
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    };
 
     const bookInfo = bookData.records[Object.keys(bookData.records)[0]]; //index the object to get book data below the OLID link
     // console.log(bookInfo.data);
 
-    const title = bookInfo.data.title;
+    const title = capitalize(bookInfo.data.title);
     const [{ name: authorName }] = bookInfo.data.authors;
     const [{ url: authorUrl }] = bookInfo.data.authors;
+    // const publishedDate = Number(bookInfo.data.publish_date.split("-")[0]);
     const publishedDate = bookInfo.data.publish_date;
     const pages = bookInfo.data.number_of_pages;
     const [{ name: publishers }] = bookInfo.data.publishers;
     const bookUrl = bookInfo.data.url;
+    // const bookIsbn = bookInfo.isbns[1];
+    // const imageCover = book.
+
+    // Book.updateMany({
+    //   title: title,
+    //   author: authorName,
+    //   year: publishedDate,
+    //   isbn: bookIsbn,
+    // });
+
+    const doc = await Book.findById(id);
+
+    doc.title = title;
+    doc.author = authorName;
+    doc.year = publishedDate;
+    doc.authorUrl = authorUrl;
+    doc.bookUrl = bookUrl;
+    // doc.isbn = bookIsbn;
+
+    await doc.save();
+
+    // Book.findOneAndUpdate({
+    //   title: title,
+    //   author: authorName,
+    //   year: publishedDate,
+    //   isbn: bookIsbn,
+    // });
+    // Book.updateOne({
+    //   title: title,
+    // });
 
     console.log(title);
     console.log(authorName);
     console.log(publishedDate);
+    // console.log(bookIsbn);
     console.log(authorUrl);
     console.log(pages);
     console.log(publishers);
     console.log(bookUrl);
+
+    // window.onload();
+    // window.location.href = `http://localhost:3000/books/${id}`;
     // const items = bookData.items;
     // const [{ fromRecord }] = items;
     // console.log(fromRecord);
@@ -193,11 +249,29 @@ const book_create_post = async (req, res) => {
   //   status: "Book sucessfully created",
   //   data: book,
   // });
-
+  // let id
   book
     .save()
-    .then((result) => res.redirect("/"))
+    .then(function (result) {
+      let id = String(result._id);
+      id = id.replace(/^\D+/g, "");
+      console.log(id);
+      let url = `/books/info/${id}`;
+      console.log(url);
+      res.redirect(url);
+    })
+    // .then((result) => res.redirect(`/books/info/${id}`))
+    // .then((result) => res.redirect("/"))
     .catch((err) => console.log(err));
+
+  // console.log(id)
+
+  // book
+  //   .save()
+  //   .then((result) => (id = result._id))
+  //   .catch((err) => console.log(err));
+
+  // console.log(id);
 };
 
 const book_delete = (req, res) => {

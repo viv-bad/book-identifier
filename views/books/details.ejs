@@ -8,17 +8,25 @@
     <div class="details content">
       <h2><%= book.title %></h2>
       <div class="content">
-        <p><%=book.author%></p>
+        <a href="<%= book.authorUrl %> "><p><%=book.author%></p></a>
         <p><%= book.year %></p>
         <p>ISBN: <%= book.isbn %></p>
-        <!-- prettier-ignore -->
-        <img src=<%= book.imageCover %> alt="image">
+
+        <a href="<%= book.bookUrl %>" ><img src=<%= book.imageCover %> alt="image"></a>
+
       </div>
 
       <a class="delete" href="/" data-doc="<%= book.id %> "><img src="/public/img/trash-can-2.png" alt="Delete"></a>
       <!-- prettier ignore -->
-      <!-- <a class="edit" href="/books/update/<%= book.id %>">Edit</a> -->
       <a class="edit" href="/books/edit/<%= book.id %> ">Edit</a>
+
+      <a class="info" href="/books/info/<%= book.id %> ">Collect info</a>
+
+<!-- 
+      <head>
+        <meta http-equiv='refresh' content='0; URL=/books/<%= book.id %> '>
+      </head> -->
+
 
 
     <%- include('../partials/footer.ejs') %>

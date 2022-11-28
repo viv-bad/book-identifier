@@ -12,11 +12,11 @@ const bookSchema = new mongoose.Schema({
     type: String,
   },
   year: {
-    type: Number,
+    type: String,
   },
   isbn: {
-    type: Number,
-    required: true,
+    type: String,
+    // required: true,
   },
   imageCover: {
     type: String,
@@ -26,8 +26,16 @@ const bookSchema = new mongoose.Schema({
     immutable: true,
     default: () => Date.now(),
   },
+  authorUrl: {
+    type: String,
+  },
+  bookUrl: {
+    type: String,
+  },
   // _id: { type: String, required: true },
 });
+
+// bookScheme.pre("/^");
 const Book = mongoose.model("Book", bookSchema);
 
 module.exports = Book;
