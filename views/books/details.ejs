@@ -5,22 +5,53 @@
   <body>
     <%- include('../partials/nav.ejs') %>
 
+    <h2 class="edit-details">Edit details</h2>
+
+    <div id="input" class="create-book">
+      <form action="/books/edit/<%= book.id %>" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" value="<%= book.title %>" name="title" id="title" name="title" />
+        <label for="author">Authors:</label>
+        <input type="text" value="<%= book.author %> "name="author" id="author" name="author" />
+        <label for="year">Year published:</label>
+        <input type="text" value="<%= book.year %> "name="year" id="year" name="year" />
+
+        <label for="subject">Subject</label>
+        <input type="text" value="<%= book.subjects %> "name="subject" id="subject" name="suvject" />
+
+
+        <label for="isbn">ISBN*:</label>
+        <input
+          type="text"
+          name="isbn"
+          value="<%= book.isbn %> "
+          id="isbn"
+          name="isbn"
+          placeholder="ISBN-13"
+        />
+        <button>Submit</button>
+      </form>
+    </div>
+
     <div class="details content">
-      <h2><%= book.title %></h2>
       <div class="content">
+        <h2><%= book.title %></h2>
         <a href="<%= book.authorUrl %> "><p><%=book.author%></p></a>
         <p><%= book.year %></p>
+        <p><%= book.subjects %> </p>
         <p>ISBN: <%= book.isbn %></p>
 
-        <a href="<%= book.bookUrl %>" ><img src=<%= book.imageCover %> alt="image"></a>
+        <a href="<%= book.bookUrl %>" ><img src=<%= book.imageCover %> class="details-image" alt="image"></a>
 
       </div>
-
-      <a class="delete" href="/" data-doc="<%= book.id %> "><img src="/public/img/trash-can-2.png" alt="Delete"></a>
+<div class="buttons">
+      <a class="delete" href="/" data-doc="<%= book.id %> "><img src="/img/red-trashcan.png" class="delete-button" alt="Delete"></a>
       <!-- prettier ignore -->
-      <a class="edit" href="/books/edit/<%= book.id %> ">Edit</a>
 
-      <a class="info" href="/books/info/<%= book.id %> ">Collect info</a>
+      <a class="info" href="/books/info/<%= book.id %> "> <img src="/img/green-tick.png" class="info-button" alt="green-tick">
+      </a>
+    </div>
+      
 
 <!-- 
       <head>

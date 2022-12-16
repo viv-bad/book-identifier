@@ -21,6 +21,9 @@ const bookSchema = new mongoose.Schema({
   imageCover: {
     type: String,
   },
+  imageCovers: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     immutable: true,
@@ -30,6 +33,9 @@ const bookSchema = new mongoose.Schema({
     type: String,
   },
   bookUrl: {
+    type: String,
+  },
+  subjects: {
     type: String,
   },
   // _id: { type: String, required: true },

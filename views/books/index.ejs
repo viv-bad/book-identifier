@@ -4,18 +4,19 @@
 
   <body>
     <%- include('../partials/nav.ejs') %>
-
-    <div class="books content">
-      <h2>All Books</h2>
-
+    <div class="container">
+      <!-- <h1>My Books</h1> -->
       <% if (books.length > 0) { %> <% books.forEach(book => { %>
       <a class="single" href="/books/<%= book._id %> ">
-        <h3 class="title"><%= book.title %></h3>
-        <p class="author"><%= book.author %></p>
-        <p class="year"><%= book.year %></p>
+        <div class="book-details">
+          <h3 class="title"><%= book.title %></h3>
+          <p class="author"><%= book.author %></p>
+          <p class="year"><%= book.year %></p>
+        </div>
         <!-- prettier-ignore -->
         <img class="image" src=<%= book.imageCover %> alt="image">
       </a>
+
       <% }) %> <% } else { %>
       <p>There are no books to display...</p>
 

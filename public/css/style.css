@@ -13,7 +13,6 @@ a {
   font-family: arial;
 }
 body {
-  /* background-color: rgb(255, 241, 223); */
   background-color: white;
 }
 
@@ -25,14 +24,17 @@ body {
   text-decoration: none;
 }
 
-footer {
-  background-color: rgba(128, 128, 128, 0.067);
-  text-align: end;
+.top{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: rgba(255, 0, 0, 0.062);
+
 }
 
 nav ul {
   text-align: right;
   list-style-type: none;
+
 }
 
 nav li a {
@@ -48,10 +50,18 @@ nav li a:hover {
   top: -4px;
 }
 
-/* .top {
-  text-align: center;
-  height: 20%;
-} */
+footer {
+  min-height: 100%;
+  display: grid;
+  margin-left: 10px;
+  margin-right: 10px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+  background-color: rgba(128, 128, 128, 0.067);
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
 .book-icon img {
   width: 5%;
@@ -61,24 +71,106 @@ nav li a:hover {
   border-radius: 50%;
 }
 
-.books a {
-  text-decoration: none;
-  color: rgb(56, 59, 220);
-  float: left;
-  padding: 5px;
-  /* text-align: 1.5em; */
+.container {
+  background-color: rgba(255, 183, 0, 0.051);
+  /* background-color: rgba(255, 183, 0, 0.718); */
+  display: grid;
+  /* grid-template-columns: 250px 250px 250px 250px; */
+  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-rows: 300px 300px 300px 300px; */
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+
+  column-gap: 150px;
+  row-gap: 10px;
+  /* margin: 10px; */
+  margin-left: 10px;
+  margin-right: 10px;
+  align-items: start;
+  padding-bottom: 20px;
 }
+
+
+.book-details{
+  color: blue;
+  text-decoration: none;
+
+}
+
+.book-details:hover {
+  color: red;
+  text-decoration: none;
+  font-style: italic;
+}
+
 
 .details {
   text-align: center;
 }
 
 .image {
+  width: 75%;
+}
+
+.details-image{
+  width: 15%;
+  /* margin-bottom: 10px; */
+}
+
+.buttons{
+  margin-bottom: 20px;
+}
+
+.edit-details{
+  margin: 10px 10px;
+  /* text-align: center; */
+}
+
+.content{
+  display: grid;
+  row-gap: 0;
+
+}
+
+.delete-button{
+  width: 2%;
+  margin: 10px;
+}
+
+.info-button {
+  width: 2%;
+  margin: 10px;
+}
+
+.create-book{
+  text-align: center;
+  margin: 20px;
+
+}
+
+label, input {
+  display: inline-block;
+}
+
+label, input {
+  margin-right: 10px;
+}
+/*
+
+
+
+
+
+
+
+
+
+
+
+.single {
   width: 50%;
   height: auto;
-  margin: auto;
-  /* float: left; */
-  /* display: inline-block; */
-  float: left;
-  padding: 10px;
+
 }
+

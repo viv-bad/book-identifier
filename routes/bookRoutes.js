@@ -11,6 +11,6 @@ router.get("/:id", bookController.book_details);
 router.get("/info/:id", bookController.book_info);
 //////DELETE/////////
 router.delete("/:id", bookController.book_delete);
-router.patch("/edit/:id", bookController.book_edit);
+router.post("/edit/:id", bookController.book_edit);
 
 module.exports = router;
