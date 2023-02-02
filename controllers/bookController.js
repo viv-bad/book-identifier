@@ -3,23 +3,19 @@ const Book = require("../models/bookModel");
 // book_index (all books), book_details (single book), book_create_get , book_create_post, book_delete
 
 const book_index = (req, res) => {
-  // let data;
   Book.find()
     .sort({ createdAt: -1 })
     .then((result) => {
-      // data = result;
-      res.render("books/index", { title: "All Books", books: result });
+      res.render(
+        "books/index",
+        { title: "All Books", books: result }
+        // to view json in postman, uncomment below
+        // (err, html) => res.send({ result })
+      );
     })
     .catch((error) => {
       console.log(error);
     });
-
-  // res.status(200).json({
-  //   status: "success",
-  //   data: {
-  //     data: data,
-  //   },
-  // });
 };
 
 const book_details = async (req, res) => {
@@ -28,26 +24,65 @@ const book_details = async (req, res) => {
 
   await Book.findById(id)
     .then((result) => {
-      res.render("books/details", { book: result, title: "Book Details" });
+      res.render(
+        "books/details",
+        { book: result, title: "Book Details" }
+        // (err, html) => res.send({ result })
+      );
     })
-
-    // Book.findById(id)
-    //   .then((result) => {
-    //     res.status(200).json({ status: "success", data: { result } });
-    //   })
-
     .catch((err) => {
       //   res.render("404", { title: "Book not found" });
       console.log(err);
     });
 };
 
+const book_create_get = (req, res) => {
+  res.render("books/create", { title: "Add new book" });
+};
+
+const book_create_post = async (req, res) => {
+  // console.log(req.body);
+  if (!req.body.isbn) {
+    res.status(400).send({ message: "You must enter an ISBN number!" });
+    return null;
+  }
+
+  const book = new Book(req.body);
+  let id = String(book._id);
+  let url = `/books/info/${id}`;
+
+  const cover = await fetch(
+    `https://covers.openlibrary.org/b/isbn/${req.body.isbn}-L.jpg`,
+    {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((res) => (book.imageCover = res.url))
+    // .then(book.save())
+    .catch((err) => console.log(err)); //HERE res.url gives the API link to the cover page now we need to integrate it into img in HTML
+
+  book
+    .save()
+    .then(function (result) {
+      let id = String(result._id);
+      let url = `/books/info/${id}`;
+      // console.log(url);
+      res.redirect(url);
+    })
+    .catch((err) => console.log(err));
+};
+
 const book_info = async (req, res) => {
   try {
     const id = req.params.id;
     let url;
-    let bookOlidData;
-    const isbn = await Book.findById(id).then((result) => result.isbn);
+    // let bookOlidData;
+    const book = req.body;
+
+    const isbn = await Book.findById(id).then((result) => result.isbn.trim());
 
     const info = await fetch(
       `https://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
@@ -58,7 +93,9 @@ const book_info = async (req, res) => {
         },
       }
     ).then((res) => (url = res.url));
-    // .then((res) => console.log(res));
+    // console.log(url);
+    // .then(res.redirect(`/books/${id}`));
+    // .then((res) => console.log(res.url));
     // .then((result) =>
     //   res.status(200).json({
     //     status: "success",
@@ -122,6 +159,7 @@ const book_info = async (req, res) => {
     const bookUrl = bookInfo.data.url;
     // const imageCovers = bookInfo.data.cover.large;
     let subjects;
+
     const genres = bookInfo.data.subjects.forEach(
       function (genre) {
         if (!genre) {
@@ -163,39 +201,6 @@ const book_info = async (req, res) => {
   }
 };
 
-const book_create_get = (req, res) => {
-  res.render("books/create", { title: "Add new book" });
-};
-
-const book_create_post = async (req, res) => {
-  console.log(req.body);
-  const book = new Book(req.body);
-  const cover = await fetch(
-    `https://covers.openlibrary.org/b/isbn/${req.body.isbn}-L.jpg`,
-    {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((res) => (book.imageCover = res.url))
-    .then(book.save())
-    .catch((err) => console.log(err)); //HERE res.url gives the API link to the cover page now we need to integrate it into img in HTML
-
-  book
-    .save()
-    .then(function (result) {
-      let id = String(result._id);
-      id = id.replace(/^\D+/g, "");
-      console.log(id);
-      let url = `/books/info/${id}`;
-      console.log(url);
-      res.redirect(url);
-    })
-    .catch((err) => console.log(err));
-};
-
 const book_delete = (req, res) => {
   const id = req.params.id;
 
@@ -212,14 +217,18 @@ const book_delete = (req, res) => {
 
 const book_edit = async (req, res, next) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const id = req.params.id;
-    console.log(id);
+    // console.log(id);
+    const book = req.body;
 
     const bookUpdate = await Book.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
-    });
+    })
+      // .then((result) => console.log(result))
+      .then(res.redirect(`/books/${id}`))
+      .catch((err) => console.log(err));
 
     // res.status(200).render("books/index.ejs", {
     //   title: "Book details updated",
@@ -229,17 +238,20 @@ const book_edit = async (req, res, next) => {
 
     // .then((result) => res.render("/books/edit", { book: book }));
 
-    console.log(req.body);
-    if (!bookUpdate) {
-      res.status(404).json({ status: "Book not found!" });
-    }
-    res.status(200).json({
-      status: "Book details successfully updated.",
-      redirect: `/books/${id}`,
-      data: {
-        data: bookUpdate,
-      },
-    });
+    // console.log(req.body);
+    // if (!bookUpdate) {
+    //   res.status(404).json({ status: "Book not found!" });
+    // }
+
+    // book.save().then((result) => console.log(result));
+
+    // res.status(200).json({
+    //   status: "Book details successfully updated.",
+    //   redirect: `/books/${id}`,
+    //   data: {
+    //     data: bookUpdate,
+    //   },
+    // });
   } catch (err) {
     console.log(err);
   }

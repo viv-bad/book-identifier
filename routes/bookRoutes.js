@@ -5,7 +5,7 @@ const router = express.Router();
 router.get("/create", bookController.book_create_get, bookController.book_info);
 router.get("/", bookController.book_index);
 ////POST REQUEST  directly from webform to database//////////
-router.post("/", bookController.book_create_post);
+router.post("/", bookController.book_create_post, bookController.book_info);
 
 router.get("/:id", bookController.book_details);
 router.get("/info/:id", bookController.book_info);
