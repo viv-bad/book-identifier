@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const { findByIdAndUpdate } = require("../models/bookModel");
 const Book = require("../models/bookModel");
 // book_index (all books), book_details (single book), book_create_get , book_create_post, book_delete
 
@@ -74,36 +75,17 @@ const book_create_post = async (req, res) => {
     })
     .catch((err) => console.log(err));
 };
-
 const book_info = async (req, res) => {
   try {
     const id = req.params.id;
     let url;
-    // let bookOlidData;
-    const book = req.body;
+    // console.log(id);
 
     const isbn = await Book.findById(id).then((result) => result.isbn.trim());
 
-    const info = await fetch(
-      `https://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((res) => (url = res.url));
-    // console.log(url);
-    // .then(res.redirect(`/books/${id}`));
-    // .then((res) => console.log(res.url));
-    // .then((result) =>
-    //   res.status(200).json({
-    //     status: "success",
-    //     data: {
-    //       result,
-    //     },
-    //   })
-    // );
+    console.log(isbn);
+
+    url = `https://openlibrary.org/api/volumes/brief/isbn/${isbn}.json`;
 
     const json = await fetch(url, {
       headers: {
@@ -111,7 +93,9 @@ const book_info = async (req, res) => {
         "Content-Type": "application/json",
       },
     })
+      // parse the data with res.json
       .then((res) => res.json())
+      // then return another promise as the data
       .then((result) => (bookData = result))
       .then(res.redirect(`/books/${id}`));
 
@@ -146,8 +130,7 @@ const book_info = async (req, res) => {
       }
     };
 
-    const bookInfo = bookData.records[Object.keys(bookData.records)[0]]; //index the object to get book data below the OLID link
-    // console.log(bookInfo.data);
+    const bookInfo = bookData.records[Object.keys(bookData.records)[0]];
 
     const title = capitalize(bookInfo.data.title);
     const [{ name: authorName }] = bookInfo.data.authors;
@@ -157,45 +140,32 @@ const book_info = async (req, res) => {
     const pages = bookInfo.data.number_of_pages;
     const [{ name: publishers }] = bookInfo.data.publishers;
     const bookUrl = bookInfo.data.url;
-    // const imageCovers = bookInfo.data.cover.large;
+    const imageCovers = bookInfo.data.cover.large;
     let subjects;
 
-    const genres = bookInfo.data.subjects.forEach(
-      function (genre) {
-        if (!genre) {
-          return;
-        } else {
-          subjects = genre.name;
-        }
+    const genres = bookInfo.data.subjects.forEach(function (genre) {
+      if (!genre) {
+        return;
+      } else {
+        subjects = genre.name;
       }
-      // (genre) => (subjects = genre.name)
-      // console.log(genre.name)
+    });
+
+    await Book.findByIdAndUpdate(
+      id,
+      {
+        title: title,
+        author: authorName,
+        year: publishedDate,
+        authorUrl: authorUrl,
+        bookUrl: bookUrl,
+        subjects: subjects,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
-
-    const doc = await Book.findById(id);
-
-    doc.title = title;
-    doc.author = authorName;
-    doc.year = publishedDate;
-    doc.authorUrl = authorUrl;
-    doc.bookUrl = bookUrl;
-    doc.subjects = subjects;
-    // doc.imageCovers = imageCovers;
-    // doc.isbn = bookIsbn;
-
-    await doc.save();
-
-    // console.log(subjects);
-    // console.log(imageCovers);
-
-    // console.log(title);
-    // console.log(authorName);
-    // console.log(publishedDate);
-    // // console.log(bookIsbn);
-    // console.log(authorUrl);
-    // console.log(pages);
-    // console.log(publishers);
-    // console.log(bookUrl);
   } catch (err) {
     console.log(err);
   }
@@ -222,14 +192,23 @@ const book_edit = async (req, res, next) => {
     // console.log(id);
     const book = req.body;
 
-    const bookUpdate = await Book.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    const bookUpdate = await Book.findByIdAndUpdate(
+      id,
+      {
+        title: req.body.title,
+        author: req.body.author,
+        year: req.body.year,
+        subjects: req.body.subjects,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
       // .then((result) => console.log(result))
       .then(res.redirect(`/books/${id}`))
       .catch((err) => console.log(err));
-
+    console.log(book);
     // res.status(200).render("books/index.ejs", {
     //   title: "Book details updated",
     //   data: bookUpdate,

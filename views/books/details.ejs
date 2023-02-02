@@ -59,12 +59,12 @@
               id="year"
             />
 
-            <label for="subject">Subject</label>
+            <label for="subjects">Subjects:</label>
             <input
               type="text"
               value="<%= book.subjects %> "
-              name="subject"
-              id="subject"
+              name="subjects"
+              id="subjects"
             />
 
             <label for="isbn">ISBN*:</label>
@@ -74,6 +74,8 @@
               value="<%= book.isbn %> "
               id="isbn"
               placeholder="ISBN-13"
+              readonly
+              class="readonly"
             />
             <button class="btn btn-form">Submit</button>
           </form>
