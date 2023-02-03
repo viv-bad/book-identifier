@@ -17,6 +17,9 @@ p {
 body {
   /* background-color: #edf2ff; */
   background: linear-gradient(to right, #edf2ff, #f3f0ff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* /////////////////////////////////////////Header + Nav Bar////////////////////////////////////// */
@@ -101,6 +104,16 @@ input::placeholder {
   width: 15rem;
   height: 2rem;
   font-size: 2rem;
+  margin-left: 0.2rem;
+}
+
+.btn-create {
+  color: #fff;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  width: 100%;
+  margin-left: 0.4rem;
 }
 
 .btn-form {
@@ -262,6 +275,7 @@ footer {
   /* grid-template-rows: auto 1fr auto; */
   /* grid-template-columns: 100%; */
   background-color: rgba(128, 128, 128, 0.067);
+  margin-top: auto;
   /* justify-content: center; */
   /* padding-top: 20px; */
   /* padding-bottom: 20px; */

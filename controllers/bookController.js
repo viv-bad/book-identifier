@@ -1,5 +1,4 @@
 const fetch = require("node-fetch");
-const { findByIdAndUpdate } = require("../models/bookModel");
 const Book = require("../models/bookModel");
 // book_index (all books), book_details (single book), book_create_get , book_create_post, book_delete
 

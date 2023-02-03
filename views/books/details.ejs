@@ -83,13 +83,17 @@
       </div>
     </div>
 
+    <!-- inline JS script for deleting  book entries-->
     <script>
+      // Select delete button link
       const trashcan = document.querySelector("a.delete");
 
+      // Add an event listener, where upon clicking an endpoint is created which takes in that dataset from the item clicked
       trashcan.addEventListener("click", (e) => {
         // console.log("click");
         const endpoint = `/books/${trashcan.dataset.doc}`;
 
+        // create a fetch DELETE method at that endpoint
         fetch(endpoint, {
           method: "DELETE",
         })
@@ -97,6 +101,7 @@
             // console.log(response.json());
             response.json();
           })
+          // redirect the window to the homepage
           .then((data) => {
             // console.log(data);
             window.location.href = data.redirect;
