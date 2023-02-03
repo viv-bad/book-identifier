@@ -2,6 +2,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const bookRoutes = require("./routes/bookRoutes");
 const dotenv = require("dotenv");
+const compression = require("compression");
 // require("ejs");
 //Express app
 const express = require("express");
@@ -40,7 +41,8 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(express.urlencoded({ extended: true })); //needed for req.body to work (accepting form data)
 app.use(express.json()); //THIS IS NEEDED TO PARSE DATA TO JSON FOR PATCH ETC!!!
-
+//compress all text sent to client
+app.use(compression());
 //////////////////////////ROUTES///////////////////////////
 
 //Home page redirect
