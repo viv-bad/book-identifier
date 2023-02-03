@@ -1,15 +1,23 @@
+// set routes here, with the callback functions within each route being the controller/handler functions in bookController
+// REMEMBER: The order of routing matters here!!!
+
 const express = require("express");
-const bookController = require("./../controllers/bookController");
 const router = express.Router();
+const bookController = require("./../controllers/bookController");
 
-router.get("/create", bookController.book_create_get, bookController.book_info);
+///////////GET REQUESTS///////////////
+
 router.get("/", bookController.book_index);
-////POST REQUEST  directly from webform to database//////////
-router.post("/", bookController.book_create_post);
+router.get("/create", bookController.book_create_get, bookController.book_info);
 
+////POST REQUEST  directly from webform to database//////////
+router.post("/", bookController.book_create_post, bookController.book_info);
+
+////////// GET BY ID ///////////////////////////
 router.get("/:id", bookController.book_details);
 router.get("/info/:id", bookController.book_info);
-//////DELETE/////////
+
+//////DELETE BY ID /////////
 router.delete("/:id", bookController.book_delete);
 router.post("/edit/:id", bookController.book_edit);
 

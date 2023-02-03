@@ -1,12 +1,10 @@
+///////////// Set schema here////////////////////
+
 const mongoose = require("mongoose");
-const bookController = require("./../controllers/bookController");
-// const slugify = require("slugify");
-// const validator = require("validator");
 
 const bookSchema = new mongoose.Schema({
   title: {
     type: String,
-    // default: bookController.book_info.title,
   },
   author: {
     type: String,
@@ -24,6 +22,7 @@ const bookSchema = new mongoose.Schema({
   imageCovers: {
     type: String,
   },
+  //could also use mongoose timestamps
   createdAt: {
     type: Date,
     immutable: true,
@@ -38,10 +37,8 @@ const bookSchema = new mongoose.Schema({
   subjects: {
     type: String,
   },
-  // _id: { type: String, required: true },
 });
 
-// bookScheme.pre("/^");
 const Book = mongoose.model("Book", bookSchema);
 
 module.exports = Book;

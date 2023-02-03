@@ -1,11 +1,5 @@
-<div id="input" class="create-book content">
-  <form action="/books" method="POST">
-    <label for="title">Title:</label>
-    <input type="text" name="title" id="title" name="title" />
-    <label for="author">Authors:</label>
-    <input type="text" name="author" id="author" name="author" />
-    <label for="year">Year published:</label>
-    <input type="text" name="year" id="year" name="year" />
+<div class="create-book">
+  <form action="/books" method="POST" class="create-book-form">
     <label for="isbn">ISBN*:</label>
     <input
       type="text"
@@ -14,6 +8,6 @@
       name="isbn"
       placeholder="ISBN-13"
     />
-    <button>Submit</button>
+    <button class="btn btn-create">Submit</button>
   </form>
 </div>

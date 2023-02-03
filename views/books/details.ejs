@@ -5,70 +5,95 @@
   <body>
     <%- include('../partials/nav.ejs') %>
 
-    <h2 class="edit-details">Edit details</h2>
-
-    <div id="input" class="create-book">
-      <form action="/books/edit/<%= book.id %>" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" value="<%= book.title %>" name="title" id="title" name="title" />
-        <label for="author">Authors:</label>
-        <input type="text" value="<%= book.author %> "name="author" id="author" name="author" />
-        <label for="year">Year published:</label>
-        <input type="text" value="<%= book.year %> "name="year" id="year" name="year" />
-
-        <label for="subject">Subject</label>
-        <input type="text" value="<%= book.subjects %> "name="subject" id="subject" name="suvject" />
-
-
-        <label for="isbn">ISBN*:</label>
-        <input
-          type="text"
-          name="isbn"
-          value="<%= book.isbn %> "
-          id="isbn"
-          name="isbn"
-          placeholder="ISBN-13"
-        />
-        <button>Submit</button>
-      </form>
-    </div>
-
-    <div class="details content">
-      <div class="content">
-        <h2><%= book.title %></h2>
-        <a href="<%= book.authorUrl %> "><p><%=book.author%></p></a>
+    <div class="edit-container">
+      <div class="book-details">
+        <a href="<%= book.bookUrl %>" target="_blank">
+          <h2><%= book.title %></h2>
+        </a>
+        <a href="<%= book.authorUrl %> " target="_blank"
+          ><p><%=book.author%></p></a
+        >
         <p><%= book.year %></p>
-        <p><%= book.subjects %> </p>
+        <p><%= book.subjects %></p>
         <p>ISBN: <%= book.isbn %></p>
+        <img src="<%= book.imageCover %>" class="book-image" alt="image" />
 
-        <a href="<%= book.bookUrl %>" ><img src=<%= book.imageCover %> class="details-image" alt="image"></a>
+        <div class="buttons">
+          <a href="/" data-doc="<%= book.id %>" class="delete">
+            <button class="delete-button">DELETE</button>
+          </a>
 
+          <a href="/books/info/<%= book.id %> ">
+            <button class="info-button">INFO</button>
+          </a>
+        </div>
       </div>
-<div class="buttons">
-      <a class="delete" href="/" data-doc="<%= book.id %> "><img src="/img/red-trashcan.png" class="delete-button" alt="Delete"></a>
-      <!-- prettier ignore -->
 
-      <a class="info" href="/books/info/<%= book.id %> "> <img src="/img/green-tick.png" class="info-button" alt="green-tick">
-      </a>
+      <div id="input" class="edit-book">
+        <h2 class="header-title">Edit details</h2>
+        <div class="edit-book-form">
+          <form
+            action="/books/edit/<%= book.id %>"
+            method="POST"
+            class="edit-book-form-items"
+          >
+            <label for="title">Title:</label>
+            <input
+              type="text"
+              value="<%= book.title %>"
+              name="title"
+              id="title"
+            />
+            <label for="author">Authors:</label>
+            <input
+              type="text"
+              value="<%= book.author %> "
+              name="author"
+              id="author"
+            />
+            <label for="year">Year published:</label>
+            <input
+              type="text"
+              value="<%= book.year %> "
+              name="year"
+              id="year"
+            />
+
+            <label for="subjects">Subjects:</label>
+            <input
+              type="text"
+              value="<%= book.subjects %> "
+              name="subjects"
+              id="subjects"
+            />
+
+            <label for="isbn">ISBN*:</label>
+            <input
+              type="text"
+              name="isbn"
+              value="<%= book.isbn %> "
+              id="isbn"
+              placeholder="ISBN-13"
+              readonly
+              class="readonly"
+            />
+            <button class="btn btn-form">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
-      
 
-<!-- 
-      <head>
-        <meta http-equiv='refresh' content='0; URL=/books/<%= book.id %> '>
-      </head> -->
-
-
-
-    <%- include('../partials/footer.ejs') %>
-
+    <!-- inline JS script for deleting  book entries-->
     <script>
+      // Select delete button link
       const trashcan = document.querySelector("a.delete");
 
+      // Add an event listener, where upon clicking an endpoint is created which takes in that dataset from the item clicked
       trashcan.addEventListener("click", (e) => {
         // console.log("click");
         const endpoint = `/books/${trashcan.dataset.doc}`;
 
+        // create a fetch DELETE method at that endpoint
         fetch(endpoint, {
           method: "DELETE",
         })
@@ -76,6 +101,7 @@
             // console.log(response.json());
             response.json();
           })
+          // redirect the window to the homepage
           .then((data) => {
             // console.log(data);
             window.location.href = data.redirect;
@@ -87,16 +113,3 @@
     </script>
   </body>
 </html>
-
-<!-- <script>
-      const edit = document.querySelector("a.edit");
-
-      edit.addEventListener("click", (e) => {
-        const endpoint = `/books/${edit.dataset.doc}`;
-        fetch(endpoint, {
-          method: "PATCH"
-        }).then((response) => {
-          console.log(response.json())
-        })
-      }
-    </script> -->
