@@ -1,4 +1,4 @@
-# [Book Identifier Application](https://book-identifier.netlify.app/) (https://book-identifier.netlify.app/) | NodeJS, MongoDB, Mongoose, Express
+# [Book Identifier Application](https://book-identifier.onrender.com/) (https://book-identifier.onrender.com/) | NodeJS, MongoDB, Mongoose, Express
 
 ---
 
@@ -34,5 +34,5 @@ This project has the following features:
 
 # Final comments
 
-To try it out for yourself [click here](https://book-identifier.netlify.app/).
+To try it out for yourself [click here](https://book-identifier.onrender.com/).
 If you have any questions or suggestions, reach out to me at vivekbadiani@gmail.com!
